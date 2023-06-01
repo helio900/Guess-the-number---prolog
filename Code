@@ -1,5 +1,6 @@
 :- dynamic(target/1).
 
+% Inicia o jogo, mostrando a introdução ao jogo
 jogar :-
     random_between(1, 100, Target),
     assert(target(Target)),
@@ -11,6 +12,7 @@ jogar :-
     nl,
     play_game(1).
 
+% Processa as tentativas
 play_game(Attempt) :-
     Attempt =< 3,
     write('Tentativa '), write(Attempt), write(': '),
@@ -19,6 +21,7 @@ play_game(Attempt) :-
     NextAttempt is Attempt + 1,
     play_game(NextAttempt).
 
+% Finaliza o jogo
 play_game(_) :-
     write('Suas três tentativas acabaram. O jogo acabou.'),
     nl,
@@ -26,6 +29,7 @@ play_game(_) :-
     write('O número correto era '), write(Target), write('.'),
     retract(target(_)).
 
+% Mostra a tentativa certa
 process_guess(Guess, Attempt) :-
     target(Target),
     Guess =:= Target,
@@ -33,12 +37,14 @@ process_guess(Guess, Attempt) :-
     nl,
     retract(target(_)).
 
+% Mostra que a tentativa é maior que o número correto
 process_guess(Guess, _) :-
     target(Target),
     Guess > Target,
     write('O número que você tentou é maior.'),
     nl.
 
+% Mostra que a tentativa é menor que o número correto
 process_guess(Guess, _) :-
     target(Target),
     Guess < Target,
